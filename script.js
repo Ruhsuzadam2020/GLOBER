@@ -15,7 +15,7 @@ async function haberleriGetir(pageNumber = 1) {
     try {
         console.log(`${pageNumber}. sayfa verisi isteniyor...`);
 
-        const response = await fetch(`https://glober-hzwh.onrender.com`);
+        const response = await fetch(`https://glober-hzwh.onrender.com/haberler?page=${pageNumber}`);
         const articles = await response.json();
 
         if (articles && articles.length > 0) {
