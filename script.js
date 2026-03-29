@@ -52,6 +52,30 @@ async function haberleriGetir(pageNumber = 1) {
     }
 }
 
+async function piyasaVerileriniGetir() {
+    const ticker = document.getElementById('ticker-content');
+    try {
+        const response = await fetch('https://glober-hzwh.onrender.com/piyasa');
+        const data = await response.json();
+        
+        // Veriyi ekrana yazdırma formatı (API'den gelen yapıya göre düzenlenir)
+        let content = "";
+        data.symbols.forEach(coin => {
+            content += ` 🟡 ${coin.symbol}: $${parseFloat(coin.price).toLocaleString()} |`;
+        });
+        
+        ticker.innerHTML = content + content; // Süreklilik için iki kez yazdırıyoruz
+    } catch (error) {
+        ticker.innerHTML = "❌ Piyasa verileri şu an alınamıyor.";
+    }
+}
+
+// Sayfa açıldığında çalıştır
+document.addEventListener('DOMContentLoaded', () => {
+    piyasaVerileriniGetir();
+    haberleriGetir(1); // Mevcut haber fonksiyonun
+});
+
 /**
  * Sayfanın altına 'İleri' ve 'Geri' butonlarını ekleyen fonksiyon
  */

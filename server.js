@@ -25,6 +25,21 @@ app.get('/haberler', async (req, res) => {
     }
 });
 
+const CRYPTO_API_KEY = process.env.CRYPTO_API_KEY;
+
+app.get('/piyasa', async (req, res) => {
+    try {
+        // FreeCryptoAPI üzerinden popüler coinleri çekiyoruz
+        const response = await axios.get(`https://api.freecryptoapi.com/v1/getData?symbols=BTC,ETH,SOL,BNB&apiKey=${CRYPTO_API_KEY}`);
+        
+        // Gelen veriyi basitleştirip gönderiyoruz
+        res.json(response.data);
+    } catch (error) {
+        console.error("Borsa Hatası:", error.message);
+        res.status(500).json({ hata: "Piyasa verileri alınamadı." });
+    }
+});
+
 
 const PORT = process.env.PORT || 3000;
 
