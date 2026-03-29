@@ -34,7 +34,7 @@ app.get('/piyasa', async (req, res) => {
         const response = await axios.get('https://api.freecryptoapi.com/v1/getData', {
             params: {
                 symbols: 'BTC,ETH,BNB,SOL', 
-                apiKey: c_key
+                Key: c_key
             }
         });
         
