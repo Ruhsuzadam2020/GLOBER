@@ -25,20 +25,21 @@ app.get('/haberler', async (req, res) => {
     }
 });
 
-const CRYPTO_API_KEY = process.env.CRYPTO_API_KEY;
-
 app.get('/piyasa', async (req, res) => {
     try {
-        const c_key = process.env.CRYPTO_API_KEY;
-        const response = await axios.get('https://api.freecryptoapi.com/v1/getData', {
+        // CoinGecko API: Anahtar (Key) istemez, limitleri geniştir ve çok stabildir.
+        const response = await axios.get('https://api.coingecko.com/api/v3/simple/price', {
             params: {
-                symbols: 'BTC,ETH,BNB,SOL', // Aralarda boşluk olmasın
-                key: c_key // Burası 'key' olmalı
+                ids: 'bitcoin,ethereum,binancecoin,solana',
+                vs_currencies: 'usd'
             }
         });
+        
+        console.log("CoinGecko Yanıtı:", response.data);
         res.json(response.data);
     } catch (error) {
-        res.status(500).json({ hata: "API verisi çekilemedi" });
+        console.error("Borsa Hatası:", error.message);
+        res.status(500).json({ hata: "Veri çekilemedi" });
     }
 });
 
