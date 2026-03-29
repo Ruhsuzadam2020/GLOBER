@@ -55,6 +55,44 @@ app.get('/piyasa', async (req, res) => {
     }
 });
 
+const COLLECT_KEY = process.env.COLLECT_API_KEY;
+
+app.get('/tr-haberler', async (req, res) => {
+    try {
+        const response = await axios.get('https://api.collectapi.com/news/getNews', {
+            params: {
+                country: 'tr',
+                tag: 'general'
+            },
+            headers: {
+                'authorization': `apikey ${COLLECT_KEY}`, // CollectAPI bu formatı ister
+                'content-type': 'application/json'
+            }
+        });
+
+        // CollectAPI formatı: { success: true, result: [...] }
+        res.json(response.data.result);
+    } catch (error) {
+        console.error("CollectAPI Hatası:", error.message);
+        res.status(500).json({ hata: "Yerel haberler çekilemedi." });
+    }
+});
+
+app.get('/spor-haberler', async (req, res) => {
+    try {
+        const response = await axios.get('https://api.collectapi.com/news/getNews', {
+            params: { tag: 'sport' }, // Sadece spor haberleri
+            headers: {
+                'authorization': `apikey ${process.env.COLLECT_API_KEY}`,
+                'content-type': 'application/json'
+            }
+        });
+        res.json(response.data.result);
+    } catch (error) {
+        res.status(500).json({ hata: "Spor haberleri alınamadı." });
+    }
+});
+
 
 const PORT = process.env.PORT || 3000;
 

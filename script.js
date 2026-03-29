@@ -51,7 +51,27 @@ async function haberleriGetir(pageNumber = 1) {
             </div>`;
     }
 }
-
+async function yerelHaberleriGetir() {
+    const container = document.getElementById('news-container');
+    try {
+        const response = await fetch('https://glober-hzwh.onrender.com/tr-haberler');
+        const articles = await response.json();
+        
+        let haberKartlari = "";
+        articles.forEach(haber => {
+            haberKartlari += `
+                <div class="news-card">
+                    <img src="${haber.image}" style="width:100%; border-radius:10px;">
+                    <h3>${haber.name}</h3>
+                    <p>${haber.description}</p>
+                    <a href="${haber.url}" target="_blank">Devamını Oku</a>
+                </div>`;
+        });
+        container.innerHTML = haberKartlari;
+    } catch (error) {
+        console.error("Hata:", error);
+    }
+}
 async function piyasaVerileriniGetir() {
     const ticker = document.getElementById('ticker-content');
     try {
@@ -67,6 +87,67 @@ async function piyasaVerileriniGetir() {
         ticker.innerHTML = "❌ CoinMarketCap verisi bekleniyor...";
     }
 }
+
+let currentSlide = 0;
+let sporHaberleri = [];
+
+async function sporSliderBaslat() {
+    try {
+        const res = await fetch('https://glober-hzwh.onrender.com/spor-haberler');
+        sporHaberleri = await res.json();
+        
+        // Sadece ilk 5 haberi alalım ki çok kalabalık olmasın
+        sporHaberleri = sporHaberleri.slice(0, 5);
+        
+        sliderGoster(0);
+        dotsOlustur();
+        
+        // 3 saniyede bir otomatik kaydır
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % sporHaberleri.length;
+            sliderGoster(currentSlide);
+        }, 3000);
+        
+    } catch (e) { console.error("Slider hatası:", e); }
+}
+
+function sliderGoster(index) {
+    const content = document.getElementById('slider-content');
+    const haber = sporHaberleri[index];
+    
+    content.innerHTML = `
+        <div style="background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.8)), url('${haber.image}'); height: 350px; background-size: cover; background-position: center; display: flex; align-items: flex-end; padding: 40px; color: white;">
+            <div style="text-align: left;">
+                <span style="background: #e74c3c; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold;">SON DAKİKA SPOR</span>
+                <h2 style="margin-top: 10px; font-size: 24px;">${haber.name}</h2>
+                <a href="${haber.url}" target="_blank" style="color: #3498db; text-decoration: none; font-weight: bold;">Habere Git →</a>
+            </div>
+        </div>
+    `;
+    updateDots(index);
+}
+
+function dotsOlustur() {
+    const dotsContainer = document.getElementById('slider-dots');
+    sporHaberleri.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.innerText = i + 1; // 1-2-3-4 şeklinde görünür
+        dot.style = "width: 30px; height: 30px; border-radius: 50%; border: none; background: rgba(255,255,255,0.5); cursor: pointer; font-weight: bold;";
+        dot.onclick = () => { currentSlide = i; sliderGoster(i); };
+        dotsContainer.appendChild(dot);
+    });
+}
+
+function updateDots(index) {
+    const dots = document.getElementById('slider-dots').children;
+    for(let i=0; i<dots.length; i++) {
+        dots[i].style.background = (i === index) ? "#fff" : "rgba(255,255,255,0.5)";
+        dots[i].style.color = (i === index) ? "#000" : "#fff";
+    }
+}
+
+// Başlatmayı unutma!
+document.addEventListener('DOMContentLoaded', sporSliderBaslat);
 
 // Sayfa açıldığında çalıştır
 document.addEventListener('DOMContentLoaded', () => {
