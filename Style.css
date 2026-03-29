@@ -14,13 +14,12 @@ body {
 
 
 .container {
-    width: 90%;
-    max-width: 1100px;
-    margin: 10px auto;
+    width: 100%;       /* %90'dan %100'e çıkardık */
+    max-width: none;    /* 1100px sınırını kaldırdık */
+    margin: 0;          /* Kenar boşluklarını sıfırladık */
     background: #fff;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    overflow: hidden; 
+    box-shadow: none;   /* Tam genişlikte gölgeye pek gerek kalmaz */
+    border-radius: 0;   /* Köşeleri sıfırladık ki ekrana tam otursun */
 }
 
 .header {
@@ -63,7 +62,9 @@ body {
 
 /* 5. İçerik Alanı */
 .content {
-    padding: 40px;
+    width: 100%;
+    max-width: 100%;
+    padding: 20px;
     text-align: center;
     min-height: 300px;
 }
@@ -82,10 +83,11 @@ body {
 }
 #news-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    margin-top: 20px;
+    /* auto-fit yerine auto-fill kullanırsan geniş ekranlarda boşluk kalmaz, yeni kartlar yan yana dizilir */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    gap: 25px;
+    padding: 30px;      /* Kenarlardan biraz nefes alsın */
+    width: 100%;
 }
 
 .news-section{
@@ -93,6 +95,8 @@ body {
 }
 
 .news-card {
+    width: 100%;
+    margin: 0;
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 15px;
