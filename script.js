@@ -58,16 +58,13 @@ async function piyasaVerileriniGetir() {
         const response = await fetch('https://glober-hzwh.onrender.com/piyasa');
         const data = await response.json();
         
-        // CoinGecko formatını işleyelim
-        const btc = data.bitcoin.usd;
-        const eth = data.ethereum.usd;
-        const sol = data.solana.usd;
+        let content = data.map(coin => 
+            ` 🟡 ${coin.symbol}: $${coin.price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} `
+        ).join(' | ');
 
-        let content = ` 🟡 BTC: $${btc.toLocaleString()} | 🔵 ETH: $${eth.toLocaleString()} | 🟣 SOL: $${sol.toLocaleString()} `;
-        
-        ticker.innerHTML = content + " | " + content; 
+        ticker.innerHTML = content + " | " + content;
     } catch (error) {
-        ticker.innerHTML = "❌ Piyasa verileri şu an alınamıyor.";
+        ticker.innerHTML = "❌ CoinMarketCap verisi bekleniyor...";
     }
 }
 

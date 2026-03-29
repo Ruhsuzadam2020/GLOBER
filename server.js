@@ -25,14 +25,33 @@ app.get('/haberler', async (req, res) => {
     }
 });
 
+const CMC_KEY = process.env.CMC_API_KEY;
+
 app.get('/piyasa', async (req, res) => {
     try {
-        // Binance API herkese açıktır ve çok daha hızlı yanıt verir.
-        const response = await axios.get('https://api.binance.com/api/v3/ticker/price?symbols=["BTCUSDT","ETHUSDT","BNBUSDT"]');
-        res.json(response.data);
+        const response = await axios.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest', {
+            params: {
+                symbol: 'BTC,ETH,SOL,BNB',
+                convert: 'USD'
+            },
+            headers: {
+                'X-CMC_PRO_API_KEY': CMC_KEY // CMC'nin istediği özel güvenlik başlığı
+            }
+        });
+
+        // CMC verisi biraz derindedir (data -> BTC -> quote -> USD -> price)
+        const rawData = response.data.data;
+        const result = [
+            { symbol: 'BTC', price: rawData.BTC.quote.USD.price },
+            { symbol: 'ETH', price: rawData.ETH.quote.USD.price },
+            { symbol: 'SOL', price: rawData.SOL.quote.USD.price },
+            { symbol: 'BNB', price: rawData.BNB.quote.USD.price }
+        ];
+
+        res.json(result);
     } catch (error) {
-        console.error("Borsa Hatası:", error.message);
-        res.status(500).json({ hata: "Veri çekilemedi" });
+        console.error("CMC API Hatası:", error.response ? error.response.data : error.message);
+        res.status(500).json({ hata: "CoinMarketCap verisi alınamadı." });
     }
 });
 
