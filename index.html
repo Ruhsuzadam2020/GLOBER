@@ -26,18 +26,28 @@
     100% { transform: translateX(-100%); }
 }
 </style>
+
     <div class="container">
         <div class="header">
             <h1>GLOBER</h1>
         </div>
-        <div class="nav">
-            <ul>
-                <li><a href="#">Anasayfa</a></li>
-                <li><a href="#">Hakkımızda</a></li>
-                <li><a href="#">Haberler</a></li>
-                <li><a href="#">İletişim</a></li>
-            </ul>
-        </div>
+        <nav class="category-nav" style="display: flex; justify-content: center; gap: 15px; margin: 20px 0; flex-wrap: wrap;">
+    <button onclick="haberleriYukle('global+war+economy', 'global')">🌍 Global</button>
+    <button onclick="haberleriYukle('general', 'tr')">🇹🇷 Türkiye</button>
+    <button onclick="haberleriYukle('economy', 'tr')">💰 Ekonomi</button>
+    <button onclick="haberleriYukle('space', 'global')">🚀 Uzay</button>
+    <button onclick="haberleriYukle('science', 'global')">🧪 Bilim</button>
+    <button onclick="haberleriYukle('movie+series', 'global')">🎬 Film/Dizi</button>
+</nav>
+
+<style>
+    .category-nav button {
+        padding: 8px 16px; border: none; border-radius: 20px; cursor: pointer;
+        background: #34495e; color: white; transition: 0.3s;
+    }
+    .category-nav button:hover { background: #3498db; }
+</style>
+       
         <div class="content">
             <h2>Hoş Geldiniz!</h2>
             <p>En iyi haber takip deneyimini yaşamak için doğru yerdesiniz. Geniş haber seçeneklerimizle, güncel ve güvenilir bilgileri size ulaştırıyoruz.</p>
