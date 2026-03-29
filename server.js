@@ -27,15 +27,8 @@ app.get('/haberler', async (req, res) => {
 
 app.get('/piyasa', async (req, res) => {
     try {
-        // CoinGecko API: Anahtar (Key) istemez, limitleri geniştir ve çok stabildir.
-        const response = await axios.get('https://api.coingecko.com/api/v3/simple/price', {
-            params: {
-                ids: 'bitcoin,ethereum,binancecoin,solana',
-                vs_currencies: 'usd'
-            }
-        });
-        
-        console.log("CoinGecko Yanıtı:", response.data);
+        // Binance API herkese açıktır ve çok daha hızlı yanıt verir.
+        const response = await axios.get('https://api.binance.com/api/v3/ticker/price?symbols=["BTCUSDT","ETHUSDT","BNBUSDT"]');
         res.json(response.data);
     } catch (error) {
         console.error("Borsa Hatası:", error.message);
