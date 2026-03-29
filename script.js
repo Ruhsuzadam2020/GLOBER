@@ -55,18 +55,18 @@ async function haberleriGetir(pageNumber = 1) {
 async function piyasaVerileriniGetir() {
     const ticker = document.getElementById('ticker-content');
     try {
+     
         const response = await fetch('https://glober-hzwh.onrender.com/piyasa');
         const data = await response.json();
         
-        // Veriyi ekrana yazdırma formatı (API'den gelen yapıya göre düzenlenir)
-        let content = "";
-        data.symbols.forEach(coin => {
-            content += ` 🟡 ${coin.symbol}: $${parseFloat(coin.price).toLocaleString()} |`;
-        });
-        
-        ticker.innerHTML = content + content; // Süreklilik için iki kez yazdırıyoruz
+        if (data && data.symbols) {
+            let content = data.symbols.map(coin => 
+                ` 🟡 ${coin.symbol}: $${parseFloat(coin.price).toLocaleString()} `
+            ).join(' | ');
+            ticker.innerHTML = content + " | " + content;
+        }
     } catch (error) {
-        ticker.innerHTML = "❌ Piyasa verileri şu an alınamıyor.";
+        ticker.innerHTML = "❌ Veri şu an ulaşılamaz durumda.";
     }
 }
 
