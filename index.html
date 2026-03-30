@@ -1,65 +1,54 @@
 <!DOCTYPE html>
+<html lang="tr">
 <head>
-    <title>Global Haberleri Takip Sitesi</title>
-    <link rel="StyleSheet" href =Style.css> 
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLOBER - Global Haber Takip</title>
+    <link rel="StyleSheet" href="Style.css"> 
 </head>
 
 <body>
-
-    <div id="crypto-ticker" style="background: #1e1e1e; color: #00ff00; padding: 8px 0; font-family: monospace; border-bottom: 2px solid #333; overflow: hidden; white-space: nowrap;">
-    <div id="ticker-content" style="display: inline-block; padding-left: 100%; animation: scroll-left 25s linear infinite;">
-        🚀 Piyasa Verileri Yükleniyor...
+    <div id="crypto-ticker" style="background: #1e1e1e; color: #00ff00; padding: 10px 0; font-family: monospace; border-bottom: 2px solid #333; overflow: hidden; white-space: nowrap;">
+        <div id="ticker-content" style="display: inline-block; padding-left: 100%; animation: scroll-left 25s linear infinite;">
+            🚀 Piyasa Verileri Yükleniyor...
+        </div>
     </div>
-</div>
 
     <div class="container">
-        <div class="header">
+        <header class="header">
             <h1>GLOBER</h1>
-        </div>
-        <nav class="category-nav" style="display: flex; justify-content: center; gap: 15px; margin: 20px 0; flex-wrap: wrap;">
-    <button onclick="haberleriYukle('global+war+economy', 'global')">🌍 Global</button>
-    <button onclick="haberleriYukle('general', 'tr')">🇹🇷 Türkiye</button>
-    <button onclick="haberleriYukle('economy', 'tr')">💰 Ekonomi</button>
-    <button onclick="haberleriYukle('space', 'global')">🚀 Uzay</button>
-    <button onclick="haberleriYukle('science', 'global')">🧪 Bilim</button>
-    <button onclick="haberleriYukle('movie+series', 'global')">🎬 Film/Dizi</button>
-</nav>
+            <p>Globel Haber </p>
+        </header>
 
-<style>
-    .category-nav button {
-        padding: 8px 16px; border: none; border-radius: 20px; cursor: pointer;
-        background: #34495e; color: white; transition: 0.3s;
-    }
-    .category-nav button:hover { background: #3498db; }
-</style>
-       
-       <div class="news-slider-container" style="position: relative; width: 100%; max-width: 800px; margin: 20px auto; overflow: hidden; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-    <div id="slider-content">
-        </div>
-    
-    <div id="slider-dots" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px;">
-        </div>
-</div>
+        <nav class="category-nav">
+            <button onclick="haberleriYukle('global+war+economy', 'global', 1)">🌍 Global</button>
+            <button onclick="haberleriYukle('general', 'tr', 1)">🇹🇷 Türkiye</button>
+            <button onclick="haberleriYukle('economy', 'tr', 1)">💰 Ekonomi</button>
+            <button onclick="haberleriYukle('space', 'global', 1)">🚀 Uzay</button>
+            <button onclick="haberleriYukle('science', 'global', 1)">🧪 Bilim</button>
+            <button onclick="haberleriYukle('movie+series', 'global', 1)">🎬 Film/Dizi</button>
+        </nav>
 
-<style>
-@keyframes scroll-left {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
-}
-</style>
-            
-            <div id="news-section">
-               
-                <div id="news-container">
-                    <p>Haberler yükleniyor...</p>
-                    </div>
+        <div class="news-slider-container" style="position: relative; width: 100%; max-width: 1200px; margin: 20px auto; overflow: hidden; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+            <div id="slider-content"></div>
+            <div id="slider-dots" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px;"></div>
+        </div>
+
+        <div id="news-section">
+            <div id="news-container">
+                <p>Haberler yükleniyor...</p>
             </div>
         </div>
 
-        <div class="footer">
-            <p>&copy; 2026 Global Haberleri Takip Sitesi. Tüm hakları saklıdır.</p>
+        <div class="content">
+            <div id="nav-controls"></div>
         </div>
+
+        <footer class="footer">
+            <p>&copy; 2026 Glober Haber Portalı. Tüm hakları saklıdır.</p>
+        </footer>
     </div>
+
     <script src="script.js"></script>
 </body>
+</html>

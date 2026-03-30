@@ -1,9 +1,9 @@
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box; 
     font-family: 'Segoe UI', Arial, sans-serif;
+   
 }
 
 body {
@@ -14,26 +14,26 @@ body {
 
 
 .container {
-    width: 100%;       /* %90'dan %100'e çıkardık */
-    max-width: none;    /* 1100px sınırını kaldırdık */
-    margin: 0;          /* Kenar boşluklarını sıfırladık */
+    width: 100%;
+    max-width: none;
+    margin: 0;
     background: #fff;
-    box-shadow: none;   /* Tam genişlikte gölgeye pek gerek kalmaz */
-    border-radius: 0;   /* Köşeleri sıfırladık ki ekrana tam otursun */
+    border-radius: 0;
 }
 
 .header {
-    background-color: #4000cb; /* Koyu lacivert/gri tonu */
+    background-color: #4000cb;
     color: #fff;
     padding: 2rem;
-    font-size: 50px;
     text-align: center;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 .header h1 {
-    font-size: 2.5rem;
-    letter-spacing: 2px;
+    font-size: 80px;     
+    letter-spacing: 5px;  
+    font-weight: bold;
+    text-transform: uppercase; 
 }
 
 
@@ -53,7 +53,7 @@ body {
     color: white;
     text-decoration: none;
     padding: 15px 25px;
-    transition: background 0.3s; /* Geçiş efekti */
+    transition: background 0.3s;
 }
 
 .nav ul li a:hover {
