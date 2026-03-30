@@ -174,11 +174,16 @@ body {
         height: 35px;
     }
 
+   
     #ticker-content {
-        font-size: 12px !important;
-        /* Mobilde başlangıç noktasını biraz daha yakın yapalım */
-        padding-left: 50%; 
-        animation: scroll-left 15s linear infinite;
+        font-size: 13px; /* Mobilde biraz daha küçük font */
+        /* Mobilde animasyonun daha akıcı olması için süreyi kısalttık */
+        animation: borsaKaydirMobil 15s linear infinite;
+    }
+
+    @keyframes borsaKaydirMobil {
+        0% { transform: translateX(100%); } 
+        100% { transform: translateX(-150%); }
     }
 
     /* Kategori butonlarını mobilde daha küçük yapalım */
