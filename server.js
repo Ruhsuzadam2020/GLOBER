@@ -21,7 +21,7 @@ app.get('/haberler', async (req, res) => {
             
             // API'nin anladığı tag isimlerine çeviriyoruz
             let apiTag = 'general'; 
-            if (konu === 'sport') apiTag = 'sport';     // 'sports' değil 'sport' olmalı
+            if (konu === 'sport') apiTag = 'sport';     
             if (konu === 'magazine') apiTag = 'magazine';
             if (konu === 'economy') apiTag = 'economy';
 
@@ -93,7 +93,7 @@ app.get('/spor-haberler', async (req, res) => {
 app.get('/piyasa', async (req, res) => {
     try {
         const response = await axios.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest', {
-            params: { symbol: 'BTC,ETH,SOL,BNB', convert: 'USD' },
+            params: { symbol: 'BTC,ETH,SOL,INJ,PAXG,BNB', convert: 'USD' },
             headers: { 'X-CMC_PRO_API_KEY': CMC_API_KEY }
         });
 
