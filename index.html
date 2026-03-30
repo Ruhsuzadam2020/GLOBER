@@ -8,30 +8,31 @@
 </head>
 
 <body>
-    <div id="crypto-ticker" style="background: #1e1e1e; color: #00ff00; padding: 10px 0; font-family: monospace; border-bottom: 2px solid #333; overflow: hidden; white-space: nowrap;">
-        <div id="ticker-content" style="display: inline-block; padding-left: 100%; animation: scroll-left 25s linear infinite;">
-            🚀 Piyasa Verileri Yükleniyor...
-        </div>
+    <div id="crypto-ticker">
+        <div id="ticker-content">🚀 Piyasa verileri yükleniyor...</div>
     </div>
 
     <div class="container">
         <header class="header">
             <h1>GLOBER</h1>
-            <p>Globel Haber </p>
+            <p>Global Haber Portalı</p>
         </header>
 
         <nav class="category-nav">
             <button onclick="haberleriYukle('global+war+economy', 'global', 1)">🌍 Global</button>
             <button onclick="haberleriYukle('general', 'tr', 1)">🇹🇷 Türkiye</button>
             <button onclick="haberleriYukle('economy', 'tr', 1)">💰 Ekonomi</button>
+            <button onclick="haberleriYukle('spor', 'tr', 1)">⚽ Spor</button>
             <button onclick="haberleriYukle('space', 'global', 1)">🚀 Uzay</button>
             <button onclick="haberleriYukle('science', 'global', 1)">🧪 Bilim</button>
             <button onclick="haberleriYukle('movie+series', 'global', 1)">🎬 Film/Dizi</button>
+            <button onclick="haberleriYukle('magazine', 'tr', 1)">🎥 TR Magazin/Film</button>
+</nav>
         </nav>
 
-        <div class="news-slider-container" style="position: relative; width: 100%; max-width: 1200px; margin: 20px auto; overflow: hidden; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+        <div class="news-slider-container">
             <div id="slider-content"></div>
-            <div id="slider-dots" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px;"></div>
+            <div id="slider-dots"></div>
         </div>
 
         <div id="news-section">
@@ -40,9 +41,7 @@
             </div>
         </div>
 
-        <div class="content">
-            <div id="nav-controls"></div>
-        </div>
+        <div id="nav-controls"></div>
 
         <footer class="footer">
             <p>&copy; 2026 Glober Haber Portalı. Tüm hakları saklıdır.</p>

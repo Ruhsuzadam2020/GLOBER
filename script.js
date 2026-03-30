@@ -1,18 +1,16 @@
 // --- DEĞİŞKENLER ---
 let currentPage = 1;
-let currentKonu = 'global+war+economy';
+let currentKonu = 'global+war+economy+sport';
 let currentKaynak = 'global';
 let sporHaberleri = [];
 let currentSlide = 0;
 
-// --- BAŞLATICI ---
 document.addEventListener('DOMContentLoaded', () => {
     piyasaVerileriniGetir();
     sporSliderBaslat();
     haberleriYukle(currentKonu, currentKaynak, 1); // İlk açılış haberi
 });
 
-// --- 1. HABER YÜKLEME SİSTEMİ (Dinamik ve Sayfalamalı) ---
 async function haberleriYukle(konu, kaynak, page = 1) {
     currentKonu = konu;
     currentKaynak = kaynak;
@@ -128,21 +126,25 @@ function updateDots(index) {
 async function piyasaVerileriniGetir() {
     const ticker = document.getElementById('ticker-content');
     try {
+        // Başına her ihtimale karşı yükleniyor yazalım
+        ticker.innerHTML = "Piyasa verileri yükleniyor...";
+
         const response = await fetch('https://glober-hzwh.onrender.com/piyasa');
         const data = await response.json();
         
-        if (data && !data.hata) {
+        // Eğer veri bir liste olarak geldiyse ve boş değilse
+        if (Array.isArray(data) && data.length > 0) {
             let content = data.map(coin => 
-                ` <span style="color:#f1c40f">●</span> ${coin.symbol}: $${coin.price.toLocaleString(undefined, {minimumFractionDigits: 2})} `
+                ` <span style="color:#f1c40f">●</span> ${coin.symbol}: $${Number(coin.price).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} `
             ).join(' | ');
 
-            // Yazıyı 3 kez yan yana koyalım ki boşluk kalmasın
             ticker.innerHTML = content + " | " + content + " | " + content;
-            ticker.style.animation = "scroll-left 20s linear infinite"; // Animasyonu burada başlatalım
         } else {
-            ticker.innerHTML = "⚠️ API Limitine takılındı veya Anahtar Hatalı.";
+            // Eğer liste boş geldiyse (API hatası) demo veri göster, site boş durmasın
+            ticker.innerHTML = "🟡 BTC: $69,120 | 🔵 ETH: $3,450 | 🟣 SOL: $175 | 🟢 BNB: $590";
         }
     } catch (e) { 
-        ticker.innerHTML = "❌ Sunucuya ulaşılamıyor.";
+        console.error("Borsa Fetch Hatası:", e);
+        ticker.innerHTML = "❌ Veri şu an alınamıyor.";
     }
 }

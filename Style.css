@@ -9,23 +9,35 @@ body {
     background-color: #f0f2f5;
 }
 
-/* 🟢 BORSA BANDI DÜZELTME */
 #crypto-ticker {
     width: 100%;
     background: #1e1e1e;
-    overflow: hidden;
-    position: relative;
     height: 40px;
+    overflow: hidden; /* Dışarı taşan yazıları gizle */
+    position: relative;
     display: flex;
     align-items: center;
+    border-bottom: 2px solid #333;
 }
 
 #ticker-content {
     white-space: nowrap;
-    display: inline-block;
+    position: absolute;
     color: #00ff00;
     font-weight: bold;
-    font-size: 14px; /* Sabit ve düzgün boyut */
+    font-size: 15px;
+    /* Animasyon ayarı: 25 saniyede bir tur atsın */
+    animation: borsaKaydir 25s linear infinite;
+}
+
+/* Kayma Animasyonu */
+@keyframes borsaKaydir {
+    0% {
+        transform: translateX(100%); /* Ekranın sağından başla */
+    }
+    100% {
+        transform: translateX(-100%); /* Ekranın solundan çık */
+    }
 }
 
 /* 🟢 HEADER VE DEV GLOBER YAZISI */
@@ -97,6 +109,8 @@ body {
     padding: 40px 20px;
     color: white;
     text-align: left;
+    align-items: flex-end;
+    
 }
 .slider-text a {
     color: #3498db;
@@ -122,11 +136,18 @@ body {
 }
 
 .news-card {
-    background: #fff;
-    border-radius: 15px;
+    height: 350px; /* Sabit yükseklik verelim */
+    position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Yazıları aşağı yaslar */
+}
+
+.news-card .card-overlay {
+    background: linear-gradient(transparent, rgba(0,0,0,0.9));
+    padding: 15px;
+    width: 100%;
 }
 
 .news-card img {
@@ -137,4 +158,37 @@ body {
 
 .news-card-body {
     padding: 20px;
+}
+
+/* 📱 MOBİL CİHAZLAR İÇİN ÖZEL AYARLAR */
+@media (max-width: 768px) {
+    
+    /* GLOBER yazısını küçült ki ekrana sığsın */
+    .header h1 {
+        font-size: 50px !important; 
+        letter-spacing: 5px !important;
+    }
+
+    /* Borsa bandını mobilde görünür yapalım */
+    #crypto-ticker {
+        height: 35px;
+    }
+
+    #ticker-content {
+        font-size: 12px !important;
+        /* Mobilde başlangıç noktasını biraz daha yakın yapalım */
+        padding-left: 50%; 
+        animation: scroll-left 15s linear infinite;
+    }
+
+    /* Kategori butonlarını mobilde daha küçük yapalım */
+    .category-nav button {
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+
+    /* Spor manşeti (Alperen Şengün) başlığını küçült */
+    .slider-text h2 {
+        font-size: 1.5rem !important;
+    }
 }
