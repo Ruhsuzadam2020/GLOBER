@@ -115,6 +115,27 @@ app.get('/piyasa', async (req, res) => {
     }
 });
 
+app.get('/altin', async (req, res) => {
+    try {
+        const response = await axios.get('https://api.collectapi.com/economy/goldPrice', {
+            headers: { 'authorization': `apikey ${COLLECT_API_KEY}` }
+        });
+        
+        // Sadece işimize yarayacak olanları (Gram, Çeyrek, Ons) seçip gönderelim
+        const altinVerileri = response.data.result.filter(a => 
+            ['Gram Altın', 'Çeyrek Altın', 'ONS'].includes(a.name)
+        ).map(a => ({
+            name: a.name,
+            price: a.sell // Satış fiyatını baz alalım
+        }));
+
+        res.json(altinVerileri);
+    } catch (error) {
+        console.error("Altın API Hatası:", error.message);
+        res.json([]);
+    }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`🚀 Glober Backend Aktif! Port: ${PORT}`);

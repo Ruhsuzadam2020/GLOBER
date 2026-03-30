@@ -173,7 +173,7 @@ body {
 
     #ticker-content {
         font-size: 13px; /* Mobilde biraz daha küçük font */
-        animation: borsaKaydir 15s linear infinite;
+        animation: borsaKaydir 30s linear infinite;
     }
 
     .category-nav button {

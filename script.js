@@ -126,25 +126,38 @@ function updateDots(index) {
 async function piyasaVerileriniGetir() {
     const ticker = document.getElementById('ticker-content');
     try {
-        // Başına her ihtimale karşı yükleniyor yazalım
-        ticker.innerHTML = "Piyasa verileri yükleniyor...";
+        // İstekleri tek tek atalım ki biri bozulursa diğeri çalışsın
+        const kriptoRes = await fetch('https://glober-hzwh.onrender.com/piyasa').catch(() => null);
+        const altinRes = await fetch('https://glober-hzwh.onrender.com/altin').catch(() => null);
 
-        const response = await fetch('https://glober-hzwh.onrender.com/piyasa');
-        const data = await response.json();
-        
-        // Eğer veri bir liste olarak geldiyse ve boş değilse
-        if (Array.isArray(data) && data.length > 0) {
-            let content = data.map(coin => 
-                ` <span style="color:#f1c40f">●</span> ${coin.symbol}: $${Number(coin.price).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} `
-            ).join(' | ');
+        const kriptoData = kriptoRes ? await kriptoRes.json() : [];
+        const altinData = altinRes ? await altinRes.json() : [];
 
-            ticker.innerHTML = content + " | " + content + " | " + content;
-        } else {
-            // Eğer liste boş geldiyse (API hatası) demo veri göster, site boş durmasın
-            ticker.innerHTML = "🟡 BTC: $69,120 | 🔵 ETH: $3,450 | 🟣 SOL: $175 | 🟢 BNB: $590";
+        let fullContent = "";
+
+        // Altınları ekle
+        if (Array.isArray(altinData) && altinData.length > 0) {
+            altinData.forEach(a => {
+                fullContent += ` <span style="color:#f1c40f">🔶</span> ${a.name}: ${a.price} TL |`;
+            });
         }
-    } catch (e) { 
-        console.error("Borsa Fetch Hatası:", e);
-        ticker.innerHTML = "❌ Veri şu an alınamıyor.";
+
+        // Kriptoları ekle
+        if (Array.isArray(kriptoData) && kriptoData.length > 0) {
+            kriptoData.forEach(coin => {
+                fullContent += ` <span style="color:#00ff00">●</span> ${coin.symbol}: $${Number(coin.price).toLocaleString()} |`;
+            });
+        }
+
+        // Eğer her şey boşsa yedek demo veri göster (Site boş durmasın)
+        if (!fullContent) {
+            fullContent = "🔶 Gram Altın: 3.250 TL | ● BTC: $69,500 | ● ETH: $3,550 | ● SOL: $185 |";
+        }
+
+        ticker.innerHTML = (fullContent + " ").repeat(4);
+
+    } catch (e) {
+        console.error("Bant Hatası:", e);
+        ticker.innerHTML = "🔶 Altın: 3.245 TL | ● BTC: $69,120 | ● ETH: $3,450";
     }
 }
