@@ -83,13 +83,15 @@ app.get('/spor-haberler', async (req, res) => {
     }
 });
 
-// 3. PİYASA VERİLERİ (CoinMarketCap)
 app.get('/piyasa', async (req, res) => {
     try {
+        console.log("CMC Verisi isteniyor... Anahtar:", CMC_API_KEY ? "Mevcut" : "EKSİK!");
+        
         const response = await axios.get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest', {
             params: { symbol: 'BTC,ETH,SOL,BNB', convert: 'USD' },
             headers: { 'X-CMC_PRO_API_KEY': CMC_API_KEY }
         });
+
         const rawData = response.data.data;
         const result = [
             { symbol: 'BTC', price: rawData.BTC.quote.USD.price },
@@ -99,7 +101,9 @@ app.get('/piyasa', async (req, res) => {
         ];
         res.json(result);
     } catch (error) {
-        res.status(500).json({ hata: "Piyasa verileri alınamadı." });
+        // Hatanın detayını terminalde (Render Logs) görebilmek için:
+        console.error("CMC API Detaylı Hata:", error.response ? error.response.data : error.message);
+        res.status(500).json({ hata: "API Hatası", detay: error.message });
     }
 });
 

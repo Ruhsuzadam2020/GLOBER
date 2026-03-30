@@ -125,26 +125,24 @@ function updateDots(index) {
     }
 }
 
-// --- 4. PİYASA VERİLERİ (Borsa Bandı) ---
 async function piyasaVerileriniGetir() {
     const ticker = document.getElementById('ticker-content');
     try {
-        // Sunucudan veriyi çek
         const response = await fetch('https://glober-hzwh.onrender.com/piyasa');
         const data = await response.json();
         
-        if (data && data.length > 0) {
-            // Veriyi formatla: BTC: $65,000.00
+        if (data && !data.hata) {
             let content = data.map(coin => 
-                ` <span style="color: #f1c40f;">●</span> ${coin.symbol}: <span style="color: #fff;">$${coin.price.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span> `
+                ` <span style="color:#f1c40f">●</span> ${coin.symbol}: $${coin.price.toLocaleString(undefined, {minimumFractionDigits: 2})} `
             ).join(' | ');
 
-            // Sonsuz döngü hissi için içeriği çiftliyoruz
+            // Yazıyı 3 kez yan yana koyalım ki boşluk kalmasın
             ticker.innerHTML = content + " | " + content + " | " + content;
+            ticker.style.animation = "scroll-left 20s linear infinite"; // Animasyonu burada başlatalım
+        } else {
+            ticker.innerHTML = "⚠️ API Limitine takılındı veya Anahtar Hatalı.";
         }
     } catch (e) { 
-        console.error("Borsa Hatası:", e);
-        ticker.innerHTML = "⚠️ Piyasa verileri şu an güncellenemiyor..."; 
+        ticker.innerHTML = "❌ Sunucuya ulaşılamıyor.";
     }
 }
-
