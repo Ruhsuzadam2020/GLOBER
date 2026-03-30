@@ -15,7 +15,7 @@ body {
     height: 40px;
     overflow: hidden; /* Dışarı taşan yazıları gizle */
     position: relative;
-    display: flex;
+    display: block;
     align-items: center;
     border-bottom: 2px solid #333;
 }
@@ -102,7 +102,6 @@ body {
     height: 100%;
 }
 
-
 .slider-text {
     background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
     width: 100%;
@@ -162,37 +161,26 @@ body {
 
 /* 📱 MOBİL CİHAZLAR İÇİN ÖZEL AYARLAR */
 @media (max-width: 768px) {
-    
-    /* GLOBER yazısını küçült ki ekrana sığsın */
+
     .header h1 {
         font-size: 50px !important; 
         letter-spacing: 5px !important;
     }
 
-    /* Borsa bandını mobilde görünür yapalım */
     #crypto-ticker {
         height: 35px;
     }
 
-   
     #ticker-content {
         font-size: 13px; /* Mobilde biraz daha küçük font */
-        /* Mobilde animasyonun daha akıcı olması için süreyi kısalttık */
-        animation: borsaKaydirMobil 15s linear infinite;
+        animation: borsaKaydir 15s linear infinite;
     }
 
-    @keyframes borsaKaydirMobil {
-        0% { transform: translateX(100%); } 
-        100% { transform: translateX(-150%); }
-    }
-
-    /* Kategori butonlarını mobilde daha küçük yapalım */
     .category-nav button {
         padding: 8px 15px;
         font-size: 12px;
     }
 
-    /* Spor manşeti (Alperen Şengün) başlığını küçült */
     .slider-text h2 {
         font-size: 1.5rem !important;
     }
