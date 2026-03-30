@@ -135,12 +135,19 @@ async function piyasaVerileriniGetir() {
 
         let fullContent = "";
 
-        // Altınları ekle
-        if (Array.isArray(altinData) && altinData.length > 0) {
-            altinData.forEach(a => {
-                fullContent += ` <span style="color:#f1c40f">🔶</span> ${a.name}: ${a.price} TL |`;
-            });
-        }
+// script.js içindeki altinData döngüsü
+if (Array.isArray(altinData) && altinData.length > 0) {
+    altinData.forEach(a => {
+        // Backend'den "name" ve "price" olarak bekliyoruz
+        // Eğer backend'den isimler farklı gelirse diye bir kontrol daha:
+        let isim = a.name || "Altın";
+        let fiyat = a.price || a.sell || a.buy || "---";
+
+        fullContent += ` <span style="color:#f1c40f">🔶</span> ${isim}: ${fiyat} TL |`;
+    });
+} else {
+    fullContent += ` <span style="color:#f1c40f">🔶</span> Altın verisi yükleniyor... |`;
+}
 
         // Kriptoları ekle
         if (Array.isArray(kriptoData) && kriptoData.length > 0) {

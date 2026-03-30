@@ -121,17 +121,20 @@ app.get('/altin', async (req, res) => {
             headers: { 'authorization': `apikey ${COLLECT_API_KEY}` }
         });
         
-        // Sadece işimize yarayacak olanları (Gram, Çeyrek, Ons) seçip gönderelim
-        const altinVerileri = response.data.result.filter(a => 
-            ['Gram Altın', 'Çeyrek Altın', 'ONS'].includes(a.name)
-        ).map(a => ({
-            name: a.name,
-            price: a.sell // Satış fiyatını baz alalım
-        }));
+        const result = response.data.result;
+        if (!result) return res.json([]);
 
-        res.json(altinVerileri);
+        // Sadece Gram ve Çeyrek'i bul
+        const altinlar = result
+            .filter(a => a.name === "Gram Altın" || a.name === "Çeyrek Altın")
+            .map(a => ({
+                name: a.name,
+                // "sell" rakam değilse "-" ise "buy" değerini al
+                price: (a.sell && a.sell !== "-") ? a.sell : a.buy
+            }));
+
+        res.json(altinlar);
     } catch (error) {
-        console.error("Altın API Hatası:", error.message);
         res.json([]);
     }
 });

@@ -27,7 +27,7 @@ body {
     font-weight: bold;
     font-size: 15px;
     /* Animasyon ayarı: 25 saniyede bir tur atsın */
-    animation: borsaKaydir 25s linear infinite;
+    animation: borsaKaydir 35s linear infinite;
 }
 
 /* Kayma Animasyonu */
