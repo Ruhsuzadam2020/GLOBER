@@ -1,14 +1,13 @@
-// --- DEĞİŞKENLER ---
 let currentPage = 1;
-let currentKonu = 'global+war+economy+sport';
-let currentKaynak = 'global';
+let currentKonu = 'general'; 
+let currentKaynak = 'tr';
 let sporHaberleri = [];
 let currentSlide = 0;
 
 document.addEventListener('DOMContentLoaded', () => {
     piyasaVerileriniGetir();
     sporSliderBaslat();
-    haberleriYukle(currentKonu, currentKaynak, 1); // İlk açılış haberi
+    haberleriYukle('general', 'tr', 1); 
 });
 
 async function haberleriYukle(konu, kaynak, page = 1) {
@@ -23,34 +22,39 @@ async function haberleriYukle(konu, kaynak, page = 1) {
         </div>`;
 
     try {
+       
         const response = await fetch(`https://glober-hzwh.onrender.com/haberler?konu=${konu}&kaynak=${kaynak}&page=${page}`);
         const articles = await response.json();
 
         if (articles && articles.length > 0) {
             let html = "";
             articles.forEach(art => {
+           
+                const resimURL = art.urlToImage || 'https://via.placeholder.com/400x200?text=Haber+Resmi';
+                const kaynakAdi = art.source?.name || "Haber Kaynağı";
+
                 html += `
                     <div class="news-card">
-                        <img src="${art.urlToImage || 'https://via.placeholder.com/400x200?text=Haber+Resmi'}" style="width:100%; border-radius:8px;">
+                        <img src="${resimURL}" style="width:100%; border-radius:8px;" alt="Haber">
                         <h3>${art.title}</h3>
                         <p>${art.description ? art.description.substring(0, 120) + '...' : 'Açıklama bulunmuyor.'}</p>
-                        <div style="display:flex; justify-content:between; align-items:center; margin-top:10px;">
-                            <small>📍 ${art.source.name}</small>
-                            <a href="${art.url}" target="_blank" class="read-more">Haberi Oku →</a>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+                            <small>📍 ${kaynakAdi}</small>
+                            <a href="${art.url}" target="_blank" class="read-more">Habere Git →</a>
                         </div>
                     </div>`;
             });
             container.innerHTML = html;
             navigasyonuGuncelle();
         } else {
-            container.innerHTML = "<p style='text-align:center; width:100%;'>Daha fazla haber bulunamadı.</p>";
+            container.innerHTML = "<p style='text-align:center; width:100%;'>Bu kategoride haber bulunamadı.</p>";
         }
     } catch (e) {
+        console.error("Haber Yükleme Hatası:", e);
         container.innerHTML = "<div class='error-box'>❌ Haberler yüklenirken bir hata oluştu.</div>";
     }
 }
 
-// --- 2. SAYFALAMA NAVİGASYONU ---
 function navigasyonuGuncelle() {
     let navDiv = document.getElementById('nav-controls');
     if (!navDiv) {
@@ -70,36 +74,50 @@ function navigasyonuGuncelle() {
 function sayfaDegistir(yon) {
     currentPage += yon;
     if (currentPage < 1) currentPage = 1;
-    window.scrollTo({ top: 400, behavior: 'smooth' }); // Slider'ın altına kaydır
+    
+    window.scrollTo({ top: 300, behavior: 'smooth' }); 
     haberleriYukle(currentKonu, currentKaynak, currentPage);
 }
 
-// --- 3. SPOR SLIDER SİSTEMİ ---
 async function sporSliderBaslat() {
+    const content = document.getElementById('slider-content');
     try {
         const res = await fetch('https://glober-hzwh.onrender.com/spor-haberler');
-        sporHaberleri = (await res.json()).slice(0, 5);
+        const data = await res.json();
         
-        if(sporHaberleri.length > 0) {
-            sliderGoster(0);
-            dotsOlustur();
-            setInterval(() => {
-                currentSlide = (currentSlide + 1) % sporHaberleri.length;
-                sliderGoster(currentSlide);
-            }, 4000);
+        if (!data || data.length === 0) {
+            content.innerHTML = "<p style='color:white; text-align:center; padding-top:100px;'>Şu an spor haberi bulunamadı.</p>";
+            return;
         }
-    } catch (e) { console.error("Slider hatası:", e); }
+
+        sporHaberleri = data.slice(0, 10); // İlk 5 haberi al
+        
+        sliderGoster(0);
+        dotsOlustur();
+
+        // Otomatik kaydırma
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % sporHaberleri.length;
+            sliderGoster(currentSlide);
+        }, 5000);
+
+    } catch (e) {
+        console.error("Slider yükleme hatası:", e);
+        content.innerHTML = "<p style='color:white; text-align:center; padding-top:100px;'>Haberler getirilirken bir sorun oluştu.</p>";
+    }
 }
 
 function sliderGoster(index) {
     const content = document.getElementById('slider-content');
     const haber = sporHaberleri[index];
+    
+    // CSS'teki .slider-item yapısına uygun HTML oluşturma
     content.innerHTML = `
-        <div class="slider-item" style="background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.9)), url('${haber.image}');">
+        <div class="slider-item" style="background-image: url('${haber.image}');">
             <div class="slider-text">
-                <span class="badge">SPOR</span>
+                <span class="badge" style="background:#4000cb; color:white; padding:5px 10px; border-radius:5px; font-size:12px;">SPOR</span>
                 <h2>${haber.name}</h2>
-                <a href="${haber.url}" target="_blank">Habere Git →</a>
+                <a href="${haber.url}" target="_blank">Haberi Oku →</a>
             </div>
         </div>`;
     updateDots(index);
@@ -107,17 +125,19 @@ function sliderGoster(index) {
 
 function dotsOlustur() {
     const dotsContainer = document.getElementById('slider-dots');
+    if(!dotsContainer) return;
     dotsContainer.innerHTML = "";
     sporHaberleri.forEach((_, i) => {
         const dot = document.createElement('button');
-        dot.innerText = i + 1;
+        dot.className = "dot";
         dot.onclick = () => { currentSlide = i; sliderGoster(i); };
         dotsContainer.appendChild(dot);
     });
 }
 
 function updateDots(index) {
-    const dots = document.getElementById('slider-dots').children;
+    const dots = document.getElementById('slider-dots')?.children;
+    if(!dots) return;
     for(let i=0; i<dots.length; i++) {
         dots[i].className = (i === index) ? "dot active" : "dot";
     }
@@ -126,45 +146,20 @@ function updateDots(index) {
 async function piyasaVerileriniGetir() {
     const ticker = document.getElementById('ticker-content');
     try {
-        // İstekleri tek tek atalım ki biri bozulursa diğeri çalışsın
-        const kriptoRes = await fetch('https://glober-hzwh.onrender.com/piyasa').catch(() => null);
-        const altinRes = await fetch('https://glober-hzwh.onrender.com/altin').catch(() => null);
-
-        const kriptoData = kriptoRes ? await kriptoRes.json() : [];
-        const altinData = altinRes ? await altinRes.json() : [];
+        const [kriptoRes] = await Promise.all([
+            fetch('https://glober-hzwh.onrender.com/piyasa').then(r => r.json()).catch(() => [])
+        ]);
 
         let fullContent = "";
-
-// script.js içindeki altinData döngüsü
-if (Array.isArray(altinData) && altinData.length > 0) {
-    altinData.forEach(a => {
-        // Backend'den "name" ve "price" olarak bekliyoruz
-        // Eğer backend'den isimler farklı gelirse diye bir kontrol daha:
-        let isim = a.name || "Altın";
-        let fiyat = a.price || a.sell || a.buy || "---";
-
-        fullContent += ` <span style="color:#f1c40f">🔶</span> ${isim}: ${fiyat} TL |`;
-    });
-} else {
-    fullContent += ` <span style="color:#f1c40f">🔶</span> Altın verisi yükleniyor... |`;
-}
-
-        // Kriptoları ekle
-        if (Array.isArray(kriptoData) && kriptoData.length > 0) {
-            kriptoData.forEach(coin => {
+  
+        if (kriptoRes.length > 0) {
+            kriptoRes.forEach(coin => {
                 fullContent += ` <span style="color:#00ff00">●</span> ${coin.symbol}: $${Number(coin.price).toLocaleString()} |`;
             });
         }
 
-        // Eğer her şey boşsa yedek demo veri göster (Site boş durmasın)
-        if (!fullContent) {
-            fullContent = "🔶 Gram Altın: 3.250 TL | ● BTC: $69,500 | ● ETH: $3,550 | ● SOL: $185 |";
-        }
-
         ticker.innerHTML = (fullContent + " ").repeat(4);
-
     } catch (e) {
-        console.error("Bant Hatası:", e);
-        ticker.innerHTML = "🔶 Altın: 3.245 TL | ● BTC: $69,120 | ● ETH: $3,450";
+        ticker.innerHTML = "🔶 Veriler güncelleniyor... | ● BTC: $--- | ● ETH: $---";
     }
 }

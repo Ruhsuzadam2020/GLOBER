@@ -9,39 +9,41 @@
 
 <body>
     <div id="crypto-ticker">
-        <div id="ticker-content">🚀 Piyasa verileri yükleniyor...</div>
+        <div id="ticker-content">
+            🔶 Altın: --- TL | ● BTC: $--- | ● ETH: $---
+        </div>
     </div>
 
+    <header class="header">
+        <h1>GLOBER</h1>
+        <p>Global Haber Portalı</p>
+    </header>
+
+    <nav class="category-nav">
+        <button onclick="haberleriYukle('general', 'tr', 1)">Gündem</button>
+        <button onclick="haberleriYukle('economy', 'tr', 1)">Ekonomi</button>
+        <button onclick="haberleriYukle('sport', 'tr', 1)">Spor</button>
+        <button onclick="haberleriYukle('magazine', 'tr', 1)">Magazin</button>
+        <button onclick="haberleriYukle('technology', 'tr', 1)">Teknoloji</button>
+        <button onclick="haberleriYukle('health', 'tr', 1)">Sağlık</button>
+    </nav>
+
     <div class="container">
-        <header class="header">
-            <h1>GLOBER</h1>
-            <p>Global Haber Portalı</p>
-        </header>
-
-        <nav class="category-nav">
-            <button onclick="haberleriYukle('global+war+economy', 'global', 1)"> Global</button>
-            <button onclick="haberleriYukle('general', 'tr', 1)">Türkiye</button>
-            <button onclick="haberleriYukle('economy', 'tr', 1)"> Ekonomi</button>
-            <button onclick="haberleriYukle('sport', 'tr', 1)"> Spor</button>
-            <button onclick="haberleriYukle('space', 'global', 1)"> Uzay</button>
-            <button onclick="haberleriYukle('science', 'global', 1)">Bilim</button>
-            <button onclick="haberleriYukle('movie+series', 'global', 1)"> Film/Dizi</button>
-            <button onclick="haberleriYukle('magazine', 'tr', 1)"> TR Magazin/Film</button>
-</nav>
-        </nav>
-
+        
         <div class="news-slider-container">
-            <div id="slider-content"></div>
+            <div id="slider-content">
+                <p style="text-align:center; padding-top:100px; color:#666;">Haber slider'ı yükleniyor...</p>
+            </div>
             <div id="slider-dots"></div>
         </div>
 
-        <div id="news-section">
+        <div id="news-section" class="content">
             <div id="news-container">
-                <p>Haberler yükleniyor...</p>
+                <p style="text-align:center; padding:20px;">Haberler yükleniyor...</p>
             </div>
         </div>
 
-        <div id="nav-controls"></div>
+        <div id="nav-controls" class="pagination-container"></div>
 
         <footer class="footer">
             <p>&copy; 2026 Glober Haber Portalı. Tüm hakları saklıdır.</p>

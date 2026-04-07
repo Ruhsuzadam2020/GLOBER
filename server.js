@@ -7,77 +7,57 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// API Anahtarları
 const NEWS_API_KEY = process.env.API_KEY;
 const CMC_API_KEY = process.env.CMC_API_KEY;
 const COLLECT_API_KEY = process.env.COLLECT_API_KEY;
 
 app.get('/haberler', async (req, res) => {
-    const { konu, kaynak } = req.query;
+    const { konu } = req.query;
 
     try {
-        // TR kaynaklı isteklerde veya 'sport' konusunda CollectAPI'ye git
-        if (kaynak === 'tr' || konu === 'sport' || konu === 'magazine') {
-            
-            // API'nin anladığı tag isimlerine çeviriyoruz
-            let apiTag = 'general'; 
-            if (konu === 'sport') apiTag = 'sport';     
-            if (konu === 'magazine') apiTag = 'magazine';
-            if (konu === 'economy') apiTag = 'economy';
+       
+        let apiTag = 'general'; 
+        
+        if (konu === 'sport') apiTag = 'sport';     
+        if (konu === 'magazine') apiTag = 'magazine';
+        if (konu === 'economy') apiTag = 'economy';
 
-            console.log(`CollectAPI isteği atılıyor: Tag -> ${apiTag}`); // Loglardan kontrol et
+        console.log(`📡 Haber isteği alındı: CollectAPI üzerinden '${apiTag}' getiriliyor...`);
 
-            const response = await axios.get('https://api.collectapi.com/news/getNews', {
-                params: { country: 'tr', tag: apiTag },
-                headers: { 'authorization': `apikey ${COLLECT_API_KEY}` }
-            });
-            
-            if (response.data && response.data.result) {
-                const trData = response.data.result.map(h => ({
-                    title: h.name,
-                    description: h.description,
-                    urlToImage: h.image,
-                    url: h.url,
-                    source: { name: h.source || "Yerel Kaynak" }
-                }));
-                return res.json(trData);
+        const response = await axios.get('https://api.collectapi.com/news/getNews', {
+            params: { country: 'tr', tag: apiTag },
+            headers: { 
+                'authorization': `apikey ${COLLECT_API_KEY}`,
+                'content-type': 'application/json' 
             }
-        }
-
-        // --- SENARYO B: Global Haber İstekleri (NewsAPI) ---
-        try {
-            let query = konu || 'global+wars+economy'; 
-            const response = await axios.get(`https://newsapi.org/v2/everything?q=${query}&language=en&pageSize=20&apiKey=${NEWS_API_KEY}`, {
-                headers: { 'User-Agent': 'GloberNewsApp/1.0' }
-            });
-            return res.json(response.data.articles);
-
-        } catch (newsError) {
-            // NewsAPI Kotası Dolduysa (429) veya Hata Verirse (426) BURASI ÇALIŞIR:
-            console.log("NewsAPI Hatası (Muhtemelen Kota), CollectAPI'ye geçiliyor...");
-            
-            const backupResponse = await axios.get('https://api.collectapi.com/news/getNews', {
-                params: { country: 'tr', tag: 'general' },
-                headers: { 'authorization': `apikey ${COLLECT_API_KEY}` }
-            });
-
-            const backupData = backupResponse.data.result.map(h => ({
-                title: h.name + " (Gündem)",
+        });
+        
+        if (response.data && response.data.result) {
+       
+            const formattedData = response.data.result.map(h => ({
+                title: h.name,
                 description: h.description,
                 urlToImage: h.image,
                 url: h.url,
-                source: { name: h.source }
+                source: { name: h.source || "Yerel Kaynak" }
             }));
-            return res.json(backupData);
+
+            return res.json(formattedData);
+        } else {
+    
+            return res.json([]);
         }
 
     } catch (error) {
-        console.error("Genel Haber Hatası:", error.message);
-        res.status(500).json({ hata: "Haberler şu an yüklenemiyor." });
+   
+        console.error("❌ CollectAPI Hatası:", error.response ? error.response.data : error.message);
+        res.status(500).json({ 
+            hata: "Haberler şu an yüklenemiyor.",
+            servis: "CollectAPI" 
+        });
     }
 });
 
-// 2. SPOR HABERLERİ (CollectAPI)
 app.get('/spor-haberler', async (req, res) => {
     try {
         const response = await axios.get('https://api.collectapi.com/news/getNews', {
@@ -106,38 +86,15 @@ app.get('/piyasa', async (req, res) => {
             { symbol: 'PAXG', price: rawData.PAXG.quote.USD.price },
             { symbol: 'BNB', price: rawData.BNB.quote.USD.price }
         ];
-        // Başarılı olduğunda sadece listeyi dön
+ 
         res.json(result); 
     } catch (error) {
         console.error("CMC Hatası:", error.message);
-        // Hata olsa bile frontend çökmesin diye boş liste dönelim
+      
         res.json([]); 
     }
 });
 
-app.get('/altin', async (req, res) => {
-    try {
-        const response = await axios.get('https://api.collectapi.com/economy/goldPrice', {
-            headers: { 'authorization': `apikey ${COLLECT_API_KEY}` }
-        });
-        
-        const result = response.data.result;
-        if (!result) return res.json([]);
-
-        // Sadece Gram ve Çeyrek'i bul
-        const altinlar = result
-            .filter(a => a.name === "Gram Altın" || a.name === "Çeyrek Altın")
-            .map(a => ({
-                name: a.name,
-                // "sell" rakam değilse "-" ise "buy" değerini al
-                price: (a.sell && a.sell !== "-") ? a.sell : a.buy
-            }));
-
-        res.json(altinlar);
-    } catch (error) {
-        res.json([]);
-    }
-});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
