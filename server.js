@@ -21,6 +21,8 @@ app.get('/haberler', async (req, res) => {
         if (konu === 'sport') apiTag = 'sport';     
         if (konu === 'magazine') apiTag = 'magazine';
         if (konu === 'economy') apiTag = 'economy';
+        if (konu === 'technology') apiTag = 'technology';
+        if (konu === 'health') apiTag = 'health';
 
         console.log(`📡 Haber isteği alındı: CollectAPI üzerinden '${apiTag}' getiriliyor...`);
 
