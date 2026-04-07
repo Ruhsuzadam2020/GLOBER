@@ -221,3 +221,15 @@ body {
     .header h1 { font-size: 45px; letter-spacing: 5px; }
     .news-slider-container { height: 350px; }
 }
+
+/* "Haberi Oku" butonunu mobilde küçültüyoruz */
+    .slider-text a {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    /* Slider noktalarını (dots) mobilde biraz daha küçültüyoruz */
+    .dot {
+        width: 8px;
+        height: 8px;
+    }
