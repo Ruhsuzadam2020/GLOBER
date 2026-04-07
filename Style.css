@@ -215,22 +215,51 @@ body {
     transform: scale(1.3);
 }
 
-
-/* --- 📱 MOBİL --- */
 @media (max-width: 768px) {
-    .header { padding: 3rem 1rem; }
-    .header h1 { font-size: 45px; letter-spacing: 5px; }
-    .news-slider-container { height: 350px; }
-}
+    /* 1. Slider yüksekliğini mobilde sınırla */
+    .news-slider-container {
+        height: 350px !important;
+        margin: 10px auto;
+    }
 
-/* "Haberi Oku" butonunu mobilde küçültüyoruz */
+    /* 2. Yazı alanını aşağıya sabitle ve karartmayı artır */
+    .slider-text {
+        padding: 20px 15px !important;
+        background: linear-gradient(to top, rgba(0,0,0,1) 30%, rgba(0,0,0,0.5) 70%, transparent 100%) !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        height: 100%; /* Kapsayıcıyı tam kaplasın ki gradient düzgün çalışsın */
+    }
+
+    /* 3. Başlık boyutunu küçült (Kesilmeyi önler) */
+    .slider-text h2 {
+        font-size: 1rem !important;
+        line-height: 1.3 !important;
+        margin-bottom: 8px !important;
+        max-height: 3.9em; /* 3 satırdan fazlasını göstermez */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+    }
+
+    /* 4. Butonu küçült */
     .slider-text a {
-        font-size: 12px;
-        padding: 6px 12px;
+        font-size: 11px !important;
+        padding: 5px 10px !important;
+        width: fit-content;
     }
 
-    /* Slider noktalarını (dots) mobilde biraz daha küçültüyoruz */
-    .dot {
-        width: 8px;
-        height: 8px;
+    /* 5. Slider noktalarını (dots) küçült ve hizala */
+    #slider-dots {
+        bottom: 10px !important;
+        right: 15px !important;
+        gap: 5px !important;
     }
+    
+    .dot {
+        width: 7px !important;
+        height: 7px !important;
+    }
+}
