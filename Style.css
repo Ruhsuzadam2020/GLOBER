@@ -21,7 +21,7 @@ body {
     position: relative;
     display: flex;
     align-items: center;
-    border-bottom: 2px solid #4000cb;
+    border-bottom: 2px solid #29725a;;
     z-index: 1100; /* En üstte kalsın */
 }
 
@@ -41,7 +41,7 @@ body {
 
 /* --- 2. HEADER (DÜZELTİLDİ) --- */
 .header {
-    background-color: #4000cb;
+    background-color: #29725a;;
     color: #fff;
     padding: 5rem 1rem; /* İç boşluğu artırdık, yazı rahatlasın */
     text-align: center;
@@ -98,12 +98,11 @@ body {
 }
 
 .category-nav button:hover {
-    background: #4000cb;
+    background: #29725a;;
     color: white;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(64, 0, 203, 0.2);
 }
-
 /* --- 4. SPOR SLIDER --- */
 .news-slider-container {
     width: 95%;
@@ -113,8 +112,14 @@ body {
     border-radius: 20px;
     overflow: hidden;
     position: relative;
-    background: #222;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+.dots-container {
+    position: absolute;
+    bottom: 20px; /* Alttan mesafe */
+    right: 30px;  /* Sağdan mesafe */
+    z-index: 10;  /* Bandın üstünde kalması için en yüksek değer */
+    display: flex;
+    gap: 8px;
 }
 
 #slider-content, .slider-item {
@@ -123,39 +128,56 @@ body {
 }
 
 .slider-item {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: repeat; 
+    background-size: 50% auto; 
+    background-position: center top;
+    position: relative;
     display: flex;
-    align-items: flex-end;
-    transition: opacity 0.5s ease-in-out;
+    /* align-items: center sildik, çünkü bandı aşağıya yaslayacağız */
+    align-items: flex-end; /* Bandı alt kısma hizalar */
+    width: 100%;
+    height: 100%;
 }
 
 .slider-text {
-    background: linear-gradient(to top, rgba(0,0,0,0.9) 30%, transparent 100%);
     width: 100%;
-    padding: 60px 40px 40px 40px;
+    /* GÖLGE GEÇİŞİ: Üstte ve altta saydam, ortada koyu siyah */
+    background: linear-gradient(
+        to bottom, 
+        transparent 0%, 
+        rgba(0, 0, 0, 0.85) 20%, 
+        rgba(0, 0, 0, 0.85) 80%, 
+        transparent 100%
+    );
+    backdrop-filter: blur(4px); /* Yumuşak bir buğu efekti */
+    padding: 60px 50px; /* İçeriğin yukarı/aşağı taşmaması için padding artırıldı */
     color: white;
+    box-sizing: border-box;
+    z-index: 2;
+    text-align: left;
 }
 
 .slider-text h2 {
-    font-size: 2.2rem;
-    margin-bottom: 15px;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
-    line-height: 1.2;
+    font-size: 1.8rem;
+    margin: 10px 0 15px 0;
+    line-height: 1.3;
+    font-weight: 600;
 }
 
 .slider-text a {
     color: #fff;
     text-decoration: none;
     font-weight: bold;
-    background: #4000cb;
-    padding: 12px 24px;
-    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1); 
+    padding: 10px 25px;
+    border-radius: 6px;
     display: inline-block;
     transition: 0.3s;
 }
 
+.slider-text a:hover {
+    background: #5a10eb;
+}
 /* --- 5. HABER IZGARASI --- */
 #news-container {
     display: grid;

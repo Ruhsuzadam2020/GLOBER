@@ -145,25 +145,21 @@ async function sporSliderBaslat(retryCount = 0) {
         }
     }
 }
-
 function sliderGoster(index) {
     const content = document.getElementById('slider-content');
     const haber = sporHaberleri[index];
     
     content.innerHTML = `
-        <div class="slider-item" style="position: relative; overflow: hidden; width: 100%; height: 400px;">
-            <img src="${haber.image}" 
-                 style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1;" 
-                 alt="${haber.name}">
-            <div class="slider-text" style="position: relative; z-index: 2; background: rgba(0,0,0,0.4);">
-                <span class="badge" style="background:#4000cb; color:white; padding:5px 10px; border-radius:5px; font-size:12px;">SPOR</span>
+        <div class="slider-item" style="background-image: url('${haber.image}');">
+            <div class="slider-text">
+                <span class="badge" style="background:#4000cb; color:white; padding:4px 12px; border-radius:4px; font-size:12px; font-weight:bold;">SPOR</span>
                 <h2>${haber.name}</h2>
-                <a href="${haber.url}" target="_blank" style="background:#4000cb; color:white; padding:8px 15px; border-radius:5px; text-decoration:none; display:inline-block; margin-top:10px;">Haberi Oku →</a>
+                <a href="${haber.url}" target="_blank">Habere Git →</a>
             </div>
         </div>`;
+    
     updateDots(index);
 }
-
 function dotsOlustur() {
     const dotsContainer = document.getElementById('slider-dots');
     if(!dotsContainer) return;
