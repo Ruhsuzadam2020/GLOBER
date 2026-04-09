@@ -151,17 +151,14 @@ function sliderGoster(index) {
     const haber = sporHaberleri[index];
     
     content.innerHTML = `
-        <div class="slider-item" style="
-            background-image: url('${haber.image}'); 
-            background-size: cover; 
-            background-position: center; 
-            background-repeat: no-repeat;
-            image-rendering: -webkit-optimize-contrast; 
-            image-rendering: crisp-edges;">
-            <div class="slider-text">
+        <div class="slider-item" style="position: relative; overflow: hidden; width: 100%; height: 400px;">
+            <img src="${haber.image}" 
+                 style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1;" 
+                 alt="${haber.name}">
+            <div class="slider-text" style="position: relative; z-index: 2; background: rgba(0,0,0,0.4);">
                 <span class="badge" style="background:#4000cb; color:white; padding:5px 10px; border-radius:5px; font-size:12px;">SPOR</span>
                 <h2>${haber.name}</h2>
-                <a href="${haber.url}" target="_blank">Haberi Oku →</a>
+                <a href="${haber.url}" target="_blank" style="background:#4000cb; color:white; padding:8px 15px; border-radius:5px; text-decoration:none; display:inline-block; margin-top:10px;">Haberi Oku →</a>
             </div>
         </div>`;
     updateDots(index);
